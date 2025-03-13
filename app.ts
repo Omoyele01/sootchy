@@ -6,18 +6,13 @@ import adminRoutes from "./src/user/admin.routes";
 const app = express();
 app.use(express.json());
 
+// Root route for testing
+app.get('/', (req, res) => {
+  res.json({ message: 'Welcome to the API!' });
+});
 
 app.use('/api/v1/auth', authRoutes);
-
-
-
-// user routes
-app.use('/api/v1/user', userRoutes)
-
-
-
-// admin routes
-app.use('/api/v1/admin', adminRoutes)
-
+app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/admin', adminRoutes);
 
 export default app;

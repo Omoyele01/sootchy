@@ -1,46 +1,45 @@
-version: '3'
+#version: "3.8"
 
 services:
-  api:
+  node-app:
+    container_name: node-app
     build:
       context: .
-    container_name: api
     depends_on:
-      - postgres
-    ports:
-      - '${PORT}:${PORT}'
-    env_file:
-      - .env
+      - postgres-db
+    restart: unless-stopped
     environment:
-      - PORT=${PORT}
-      - DB_USER=root
-      - DB_NAME=sootchy
-      - DB_PORT=5432
-      - DB_PASS=toor
-      - DB_HOST=postgres
-      - JWT_SECRET=c300bea63c334c543b122061ce3efe838d47fbee793f31b8b965537ba02dd47e0bc7540317d55f1f43af48e0a8805d6d61ca09bdb5a15380cf95c1db14605e85
-      - JWT_ISSUER=sootchy.com
-      - JWT_AUDIENCE=sootchy.com
-      - JWT_EXPIRES_IN=1h
-      - JWT_ALGORITHM=HS256
-      - JWT_REFRESH_EXPIRES_IN=7d
+      DB_HOST: "postgres-db"
+      DB_USER: "yele"
+      DB_PASS: "secret"
+      DB_NAME: "demo"
+      DB_PORT: "5432"
+      PORT: 5002
+    ports:
+      - 8080:5002
     volumes:
-      - .:/var/www/
+      - .:/www/app
+    networks:  # Reference the network here
+      - altsch-network
 
-  postgres:
-    restart: always
-    image: postgres:12-alpine
-    container_name: api-db
+  postgres-db: 
+    container_name: postgres-db
+    image: postgres:17.4
+    restart: unless-stopped
     environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=toor
-      - POSTGRES_DB=sootchy
+      POSTGRES_DB: "demo"
+      POSTGRES_USER: "yele"
+      POSTGRES_PASSWORD: "secret"
     ports:
-      - 5433:5432
+      - 5001:5432
     volumes:
-      - ./docker-db/scripts/db:/scripts
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      - postgres-data:/var/lib/postgresql/data
+    networks:  # Reference the network here
+      - altsch-network
+
+volumes:
+  postgres-data:
+
+networks:  # Define the network at the root level
+  altsch-network: 
+    driver: bridge
