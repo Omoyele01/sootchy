@@ -7,7 +7,7 @@ on:
       - develop
 
 env:
-  AWS_REGION: "eu-west-1"
+  AWS_REGION: "eu-west-2"
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_ECR_REGISTRY: ${{ secrets.AWS_ECR_REGISTRY }}
@@ -57,7 +57,7 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to EC2 54.74.153.110 ⏳
+      - name: Deploy to EC2 35.176.248.231 ⏳
         uses: appleboy/ssh-action@master
         if: github.ref == 'refs/heads/develop'
         with:
