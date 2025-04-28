@@ -3,8 +3,9 @@
 services:
   node-app:
     container_name: node-app
-    build:
-      context: .
+    # build:
+    # context: .
+    image: 488626125052.dkr.ecr.eu-west-2.amazonaws.com/node-app:latest
     depends_on:
       - postgres-db
     restart: unless-stopped
@@ -23,7 +24,7 @@ services:
       - altsch-network
 
   postgres-db: 
-    container_name: postgres-db
+    container_name: node-app
     image: postgres:17.4
     restart: unless-stopped
     environment:
